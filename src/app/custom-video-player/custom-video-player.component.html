@@ -7,13 +7,13 @@
   <div class="video-tools">
       <!-- 影片進度(上排) -->
       <div class="video-progress">
-          <mat-slider min="0" [max]="totalSecondTime" aria-label="units" (input)="timeControl($event)"></mat-slider>
+          <mat-slider step="1" min="0" max="100" aria-label="units" (input)="timeControl($event)" [value]="sliderPercent"></mat-slider>
       </div>
       <!-- 左邊功能列(下排) -->
       <div class="video-features">
           <div class="video-features-control">
               <button class="replay-10" mat-button style="width:40px;" (click)="dataSkip(-10)">
-                  <mat-icon>replay_10</mat-icon>
+                  <mat-icon>fast_rewind</mat-icon>
               </button>
               <button class="replay" mat-button>
                   <mat-icon>replay</mat-icon>
@@ -25,7 +25,7 @@
                   <mat-icon>play_arrow</mat-icon>
               </button>
               <button class="forward-10" mat-button (click)="dataSkip(10)">
-                  <mat-icon>forward_10</mat-icon>
+                  <mat-icon>fast_forward</mat-icon>
               </button>
               <!-- 音量 -->
               <button class="volume-up" mat-button (click)="volumeMuted()" *ngIf="!isMuted">
@@ -44,8 +44,8 @@
           </div>
           <!-- 右邊功能 -->
           <div class="video-features-setting">
-              <button class="settings" mat-button (click)="openSetting()">
-                  <mat-icon>settings</mat-icon>
+              <button class="settings" mat-button (click)="speedSetting()">
+                  <mat-icon>speed</mat-icon>
               </button>
               <div class="speed-setting" *ngIf="showSetting">
                   <h4 style="padding:8px 12px;border-bottom:1px solid #fff">Play Speed</h4>

@@ -20,6 +20,7 @@ export class CustomVideoPlayerComponent implements OnInit {
   showSetting: boolean = false;
   videoSpeed: number = 0;
   sliderPercent: number = 0;
+  timer: unknown;
   @ViewChild('video') video!: ElementRef;
 
   constructor(private renderer: Renderer2, private videoDurationTimePipe: VideoDurationTimePipe) { }
@@ -40,14 +41,8 @@ export class CustomVideoPlayerComponent implements OnInit {
     })
 
     this.renderer.listen(this.video.nativeElement, 'timeupdate', () => {
-      // 當前時間
-      // console.log(this.video.nativeElement.currentTime)
-      // this.currentTime = this.videoDurationTimePipe.transform(this.video.nativeElement.currentTime)
-      this.currentTime = this.video.nativeElement.currentTime >= 1 ? moment.duration( this.video.nativeElement.currentTime, 'seconds').format() : '0:00';
-      console.log(this.currentTime)
-      // this.sliderPercent = Math.round(this.video.nativeElement.currentTime / this.video.nativeElement.duration * 10000) / 100
-
-      // console.log(this.sliderPercent)
+      this.sliderPercent = Math.round(this.video.nativeElement.currentTime / this.video.nativeElement.duration * 10000) / 100
+      console.log(this.sliderPercent)
     })
 
   }
@@ -57,6 +52,10 @@ export class CustomVideoPlayerComponent implements OnInit {
     console.log(e)
     if(!this.isPlay){
       this.video.nativeElement.play();
+      this.timer = setInterval(() => {
+        // 當前時間
+        this.currentTime = this.video.nativeElement.currentTime >= 1 ? moment.duration( this.video.nativeElement.currentTime, 'seconds').format() : '0:00';
+      },1000)
     } else {
       this.video.nativeElement.pause();
     }
@@ -86,9 +85,10 @@ export class CustomVideoPlayerComponent implements OnInit {
 
   // 移動時間點
   timeControl(event: any){
-    console.log(event)
-    this.renderer.setProperty(this.video.nativeElement, 'currentTime', event.value)
-    this.currentTime = moment.duration( event.value, 'seconds').format();
+    // 計算進度條百分比
+    let progressBarScore = (this.video.nativeElement.duration * event.value) / 100
+    this.currentTime = this.video.nativeElement.currentTime >= 1 ? moment.duration( progressBarScore, 'seconds').format() : '0:00';
+    this.renderer.setProperty(this.video.nativeElement, 'currentTime', progressBarScore)
   }
 
   // 放大/縮小
@@ -98,7 +98,7 @@ export class CustomVideoPlayerComponent implements OnInit {
   }
 
   // 打開設定
-  openSetting(){
+  speedSetting(){
     this.showSetting = !this.showSetting;
   }
 
