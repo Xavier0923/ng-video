@@ -38,7 +38,7 @@ export class VideoPlayerComponent implements OnInit {
       aspectRatio: '16:9',
       autoplay: false,
       sources: [{ src: 'assets/big_buck_bunny_720p_surround.mp4', type: 'video/mp4' }],
-      plugins: { hotkeys: { enableModifiersForNumber: false, seekStep: 20 }, seekButtons: {forward: 10, back:10} }
+      plugins: { hotkeys: { enableModifiersForNumber: false, seekStep: 20 } }
     }
     console.log(this.videoPlayer)
     this.player = videojs(this.videoPlayer.nativeElement, this.options);
@@ -46,14 +46,18 @@ export class VideoPlayerComponent implements OnInit {
     // 刪除字母畫面
     const pictureInPicture = this.player.controlBar.getChild('pictureInPictureToggle')!;
     this.player.controlBar.removeChild(pictureInPicture)
+
     // 添加快轉到退鍵
-    // const playbtn = this.player.controlBar.getChild("playToggle");
-    // const playbtnindex = this.player.controlBar.children().indexOf(playbtn);
-    // console.log('playbtn', playbtnindex)
-    // const replaybtn = this.player.controlBar.addChild('button', {
-    //   controlText: 'forward-10',
-    //   className: 'vjs-control-text'
-    // }, playbtnindex + 1)
+    const playbtn = this.player.controlBar.getChild("playToggle");
+    const playbtnindex = this.player.controlBar.children().indexOf(playbtn);
+    console.log('playbtn', playbtnindex)
+    const forwardbtn = this.player.controlBar.addChild('button', {
+      className: 'vjs-icon-forward-30'
+    }, playbtnindex + 1)
+    const replaybtn = this.player.controlBar.addChild('button', {
+      className: 'vjs-icon-replay-30'
+    }, playbtnindex)
+    // 建立畫布
     this.canvas = this.renderer.createElement("canvas");
     console.log(this.videoPlayer)
     this.renderer.listen(this.videoPlayer.nativeElement, 'timeupdate', () => {
