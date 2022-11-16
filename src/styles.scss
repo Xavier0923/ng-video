@@ -1,8 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'video.js/dist/video-js.css';
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
 
 *{
   margin: 0;
   padding: 0;
+}
+.mat-slider-track-fill,
+.mat-slider-wrapper,
+.mat-slider-track-wrapper,
+.mat-slider-track-background {
+  height: 6px !important;
+}
+
+.mat-accent .mat-slider-thumb {
+  box-shadow: rgba(0, 0, 0) 0px 5px 15px;
+}
+
+.mat-menu-content {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  padding: 0 10px !important;
 }

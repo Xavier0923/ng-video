@@ -6,11 +6,13 @@ import {MatSliderModule} from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 import { AppComponent } from './app.component';
 import { VideoPlayerComponent } from './video-player/video-player.component';
 import { CustomVideoPlayerComponent } from './custom-video-player/custom-video-player.component';
-import { VideoDurationTimePipe } from './video-duration-time.pipe';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -24,9 +26,12 @@ import { VideoDurationTimePipe } from './video-duration-time.pipe';
     MatCardModule,
     MatIconModule,
     MatButtonModule,
-    MatSliderModule
+    MatSliderModule,
+    MatMenuModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule
   ],
-  providers: [VideoDurationTimePipe],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
