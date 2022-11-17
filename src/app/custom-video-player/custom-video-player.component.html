@@ -1,18 +1,27 @@
 
-<div #videoWindow style="position: relative;">
-    <video class="video-player" #video style="width:100%;" poster="assets/big_buck_bunny.jpg" (click)="playVideo()" preload="auto">
+<div class="video-wrapper" style="display: flex;align-items: flex-end;">
+  <div #videoWindow style="position: relative;min-width:600px;">
+    <video class="video-player" style="width:100%;" #videoPlayer poster="assets/big_buck_bunny.jpg" (click)="playVideo()" preload="auto">
       <source src="assets/big_buck_bunny_720p_surround.mp4" type="video/mp4">
       Your browser does not support the video tag.
   </video>
-  <!-- 失敗動圖 -->
-  <div *ngIf="" style="width:100%;height:100%;">
+  <!-- 失敗 -->
+  <!-- <div *ngIf="" style="width:100%;height:100%;">
     <img src="assets/want-want.error.gif" alt="">
+  </div> -->
+  <!-- big play button -->
+  <div *ngIf="!isPlay || isLoading" (click)="playVideo()" style="width:100%;height:100%;position: absolute;top:0;right:0;left:0;bottom:0;background-color: rgba(0, 0, 0, 0.3);display: flex;align-items: center;justify-content: center;">
+    <button *ngIf="!isPlay" mat-fab style="width:60px;height:60px;display: flex;align-items: center;justify-content: center;">
+      <mat-icon>play_arrow</mat-icon>
+    </button>
+    <!-- <mat-progress-bar style="width:50%;" *ngIf="isLoading" mode="buffer"></mat-progress-bar> -->
+    <!-- <mat-progress-bar *ngIf="isLoading" mode="determinate" value="40"></mat-progress-bar> -->
+    <mat-spinner color="accent" *ngIf="isLoading"></mat-spinner>
   </div>
   <div class="video-tools">
       <!-- 影片進度(上排) -->
       <div class="video-progress">
           <mat-slider min="0" [max]="totalSecondTime" aria-label="units" (input)="timeControl($event)" [value]="sliderTime"></mat-slider>
-          <!-- <mat-progress-bar color="basic" mode="determinate" value="40"></mat-progress-bar> -->
       </div>
       <!-- 左邊功能列(下排) -->
       <div class="video-features">
@@ -40,8 +49,7 @@
                   <mat-icon>volume_off</mat-icon>
               </button>
               <div class="volume-control">
-                  <mat-slider *ngIf="!isLoading" thumbLabel step="1" min="0" max="100" aria-label="units" (input)="volumeControl($event)" value="50"></mat-slider>
-                  <mat-progress-bar *ngIf="isLoading" mode="buffer"></mat-progress-bar>
+                  <mat-slider thumbLabel step="1" min="0" max="100" aria-label="units" (input)="volumeControl($event)" [value]="volume"></mat-slider>
               </div>
               <!-- 時間 -->
               <div class="video-time">
@@ -54,7 +62,7 @@
               <button class="settings" mat-button [matMenuTriggerFor]="speedMenu">
                   <mat-icon>speed</mat-icon>
               </button>
-              <mat-menu #speedMenu="matMenu" yPosition="above">
+              <mat-menu #speedMenu="matMenu" yPosition="above" style="color:#fff !important;">
                 <button mat-menu-item (click)="setPlaySpeed(0.25)">0.25</button>
                 <button mat-menu-item (click)="setPlaySpeed(0.5)">0.5</button>
                 <button mat-menu-item (click)="setPlaySpeed(0.75)">0.75</button>
@@ -84,4 +92,21 @@
           </div>
       </div>
   </div>
+</div>
+<button mat-raised-button color="primary" style="min-width:100px !important;" (click)="getVideoMarker()">擷取畫面</button>
+<mat-card style="display: flex;align-items: flex-start;min-width:300px;height: 300px;overflow: auto;">
+  <div style="margin-right:10px;width:200px;" *ngFor="let marker of videoMarkers;let i = index;">
+    <!-- 圖片 -->
+    <img style="width:200px;height: 120px;" [src]="marker.imgSrc" alt="" (click)="jumpSpecifiedFragment(marker.secondTime)">
+    <!-- 時間 -->
+    <p>time: {{marker.currentTime}}</p>
+    <textarea rows="4" style="width:100%;max-width:200px;max-height:80px;" placeholder="備註"></textarea>
+    <mat-card-actions align="right">
+      <button mat-raised-button style="width:40px !important;height:40px;padding: 0" (click)="deleteFragment(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-card-actions>
+  </div>
+</mat-card>
+
 </div>

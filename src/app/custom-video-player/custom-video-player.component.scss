@@ -1,7 +1,10 @@
 * {
-  color: #fff;
   margin: 0;
   padding: 0;
+}
+
+.video-player {
+  display: block;
 }
 
 .video-player:hover + .video-tools{
@@ -50,12 +53,12 @@ li {
 
 .video-tools {
   position: absolute;
-  bottom: 3px;
+  bottom: 0;
   width: 100%;
   background-image: linear-gradient(to top, rgb(53, 48, 48), transparent 100%);
   transition: .5s;
   opacity: 0;
-  // z-index: 2147483647;
+  color: #fff;
 }
 
 .video-features {

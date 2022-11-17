@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSliderModule} from '@angular/material/slider';
@@ -13,6 +15,7 @@ import { VideoPlayerComponent } from './video-player/video-player.component';
 import { CustomVideoPlayerComponent } from './custom-video-player/custom-video-player.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { UploadImageService } from './upload-image.service';
 
 @NgModule({
   declarations: [
@@ -29,9 +32,10 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatSliderModule,
     MatMenuModule,
     MatProgressBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [UploadImageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
