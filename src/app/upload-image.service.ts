@@ -8,14 +8,14 @@ import { Observable } from 'rxjs';
 })
 export class UploadImageService {
 
-  fileUrl = 'C:/Users/cti111123/Documents/workspace/ctitv/video-file'
+  fileUrl = 'http://127.0.0.1:8080/'
 
   constructor(private http: HttpClient) { }
 
   uploadImage(file: File): Observable<HttpResponse<any>>{
     console.log(file)
-    // const formData = new FormData()
-    // formData.append('file', file)
-    return this.http.post<any>(this.fileUrl, file);
+    const formData = new FormData()
+    formData.append('file', file)
+    return this.http.post<any>(this.fileUrl, formData);
   }
 }

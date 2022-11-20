@@ -59,10 +59,10 @@
           <!-- 右邊功能 -->
           <div class="video-features-setting">
               <span style="margin-right:5px;" *ngIf="videoSpeed !== 1">Speed: {{videoSpeed}}</span>
-              <button class="settings" mat-button [matMenuTriggerFor]="speedMenu">
+              <button class="settings" mat-button (click)="speedSetting()">
                   <mat-icon>speed</mat-icon>
               </button>
-              <mat-menu #speedMenu="matMenu" yPosition="above" style="color:#fff !important;">
+              <!-- <mat-menu #speedMenu="matMenu" yPosition="above">
                 <button mat-menu-item (click)="setPlaySpeed(0.25)">0.25</button>
                 <button mat-menu-item (click)="setPlaySpeed(0.5)">0.5</button>
                 <button mat-menu-item (click)="setPlaySpeed(0.75)">0.75</button>
@@ -70,9 +70,9 @@
                 <button mat-menu-item (click)="setPlaySpeed(1.25)">1.25</button>
                 <button mat-menu-item (click)="setPlaySpeed(1.5)">1.5</button>
                 <button mat-menu-item (click)="setPlaySpeed(1.75)">1.75</button>
-              </mat-menu>
-              <!-- <div class="speed-setting" *ngIf="showSetting">
-                  <h4 style="padding:8px 12px;border-bottom:1px solid #fff">Play Speed</h4>
+              </mat-menu> -->
+              <div class="speed-setting" *ngIf="showSetting">
+                  <!-- <h4 style="padding:8px 12px;border-bottom:1px solid #fff">Play Speed</h4> -->
                   <ul>
                       <li (click)="setPlaySpeed(0.25)">0.25</li>
                       <li (click)="setPlaySpeed(0.5)">0.5</li>
@@ -82,7 +82,7 @@
                       <li (click)="setPlaySpeed(1.5)">1.5</li>
                       <li (click)="setPlaySpeed(1.75)">1.75</li>
                   </ul>
-              </div> -->
+              </div>
               <button class="zoom-out-map" *ngIf="!isFullScreen" mat-button (click)="fullScreen()">
                   <mat-icon>zoom_out_map</mat-icon>
               </button>

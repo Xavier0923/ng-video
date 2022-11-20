@@ -34,7 +34,7 @@ export class CustomVideoPlayerComponent implements OnInit {
   showSetting: boolean = false;
   videoSpeed: number = 1;
   sliderTime: number = 0;
-  timer: unknown;
+  timer: ReturnType<typeof setInterval>;
   isError: boolean;
   isFullScreen: boolean = false;
   isLoading: boolean = false;
@@ -54,9 +54,6 @@ export class CustomVideoPlayerComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.videoWindow)
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
     // 載入影片
     this.renderer.listen(this.videoPlayer.nativeElement, 'loadeddata', () => {
       console.log('is loaded')
@@ -67,7 +64,6 @@ export class CustomVideoPlayerComponent implements OnInit {
     })
 
     this.canvas = this.renderer.createElement("canvas");
-    console.log(this.canvas)
 
     // 監聽更新時間
     this.renderer.listen(this.videoPlayer.nativeElement, 'timeupdate', () => {
@@ -81,27 +77,34 @@ export class CustomVideoPlayerComponent implements OnInit {
       this.image = this.canvas.toDataURL('image/jpeg');
     })
 
+    // 緩衝中
     this.renderer.listen(this.videoPlayer.nativeElement, 'waiting', () => {
       console.log('waiting')
       this.isLoading = true;
       this.isPlay = true;
     })
 
+    // 播放中
     this.videoPlayer.nativeElement.onplaying = () => {
       console.log('onplaying')
       this.isLoading = false;
       this.isPlay = true;
     }
+
+    // 是否可以播放
     this.videoPlayer.nativeElement.oncanplay = () => {
+      console.log('oncanplay')
       this.isPlay = false;
     }
 
+    // 開始載入
     this.videoPlayer.nativeElement.onloadstart = () => {
       console.log('onloadstart')
       this.isLoading = true;
       this.isPlay = true;
     }
 
+    // 針對不同瀏覽器監聽全螢幕狀態
     this.renderer.listen(this.videoWindow.nativeElement, 'fullscreenchange', () => {
       this.isFullScreen = !this.isFullScreen;
     })
@@ -122,13 +125,13 @@ export class CustomVideoPlayerComponent implements OnInit {
   playVideo() {
     if (!this.isPlay) {
       this.videoPlayer.nativeElement.play();
-      console.log(this.videoPlayer.nativeElement.currentTime)
       this.timer = setInterval(() => {
-        // 當前時間
-        this.currentTime = this.videoPlayer.nativeElement.currentTime >= 1 ? moment.duration(this.videoPlayer.nativeElement.currentTime, 'seconds').format() : '0:00';
+        // console.log(moment.duration((this.videoPlayer.nativeElement.currentTime < 1 ? 1 : 0), 'seconds').format())
+        this.currentTime = moment.duration((this.videoPlayer.nativeElement.currentTime < 1 ? 1 : this.videoPlayer.nativeElement.currentTime), 'seconds').format();
       }, 1000 / this.videoSpeed)
     } else {
       this.videoPlayer.nativeElement.pause();
+      clearInterval(this.timer);
     }
     this.isPlay = !this.isPlay;
 
