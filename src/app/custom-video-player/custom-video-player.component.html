@@ -59,7 +59,7 @@
           <!-- 右邊功能 -->
           <div class="video-features-setting">
               <span style="margin-right:5px;" *ngIf="videoSpeed !== 1">Speed: {{videoSpeed}}</span>
-              <button class="settings" mat-button (click)="speedSetting()">
+              <button class="settings" mat-button (click)="speedSetting($event)">
                   <mat-icon>speed</mat-icon>
               </button>
               <!-- <mat-menu #speedMenu="matMenu" yPosition="above">
@@ -97,7 +97,9 @@
 <mat-card style="display: flex;align-items: flex-start;min-width:300px;height: 300px;overflow: auto;">
   <div style="margin-right:10px;width:200px;" *ngFor="let marker of videoMarkers;let i = index;">
     <!-- 圖片 -->
-    <img style="width:200px;height: 120px;" [src]="marker.imgSrc" alt="" (click)="jumpSpecifiedFragment(marker.secondTime)">
+    <div style="width:200px;height:120px;">
+      <img style="width:100%;height:100%;object-fit: cover;" [src]="marker.imgSrc" alt="" (click)="jumpSpecifiedFragment(marker.secondTime)">
+    </div>
     <!-- 時間 -->
     <p>time: {{marker.currentTime}}</p>
     <textarea rows="4" style="width:100%;max-width:200px;max-height:80px;" placeholder="備註"></textarea>

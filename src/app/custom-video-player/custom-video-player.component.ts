@@ -4,12 +4,12 @@ import 'moment-duration-format'
 import { from, Observable } from 'rxjs';
 import { UploadImageService } from '../upload-image.service';
 
-interface BrowserFullScreen extends Document {
-  exitFullscreen: () => Promise<void>;
-  mozCancelFullScreen: () => Promise<void>;
-  webkitExitFullscreen: () => Promise<void>;
-  msExitFullscreen: () => Promise<void>;
-}
+// interface BrowserFullScreen extends Document {
+//   exitFullscreen: () => Promise<void>;
+//   mozCancelFullScreen: () => Promise<void>;
+//   webkitExitFullscreen: () => Promise<void>;
+//   msExitFullscreen: () => Promise<void>;
+// }
 
 interface VideoMarker {
   imgSrc: string,
@@ -38,7 +38,6 @@ export class CustomVideoPlayerComponent implements OnInit {
   isError: boolean;
   isFullScreen: boolean = false;
   isLoading: boolean = false;
-  document: BrowserFullScreen;
 
   canvas: HTMLCanvasElement;
   videoMarkers: VideoMarker[] = [];
@@ -70,11 +69,15 @@ export class CustomVideoPlayerComponent implements OnInit {
       // 當前毫秒
       this.sliderTime = this.videoPlayer.nativeElement.currentTime;
       // 預載寫入畫布
-      this.canvas.width = 400;
-      this.canvas.height = 300;
+      console.log(this.videoPlayer.nativeElement.width)
+      this.renderer.setAttribute(this.canvas, 'width', '1600');
+      this.renderer.setAttribute(this.canvas, 'height', '900');
+      // this.canvas.width = this.videoPlayer.nativeElement.width;
+      // this.canvas.height = this.videoPlayer.nativeElement.height;
       let ctx = this.canvas.getContext('2d');
-      ctx.drawImage(this.videoPlayer.nativeElement, 0, 0, this.canvas.width, this.canvas.height);
-      this.image = this.canvas.toDataURL('image/jpeg');
+      ctx.drawImage(this.videoPlayer.nativeElement, 0, 0, 1600, 900);
+      this.image = this.canvas.toDataURL('image/png');
+      // console.log(this.image)
     })
 
     // 緩衝中
@@ -104,6 +107,10 @@ export class CustomVideoPlayerComponent implements OnInit {
       this.isPlay = true;
     }
 
+    this.renderer.listen(window, 'click', () => {
+      this.showSetting = false;
+    })
+
     // 針對不同瀏覽器監聽全螢幕狀態
     this.renderer.listen(this.videoWindow.nativeElement, 'fullscreenchange', () => {
       this.isFullScreen = !this.isFullScreen;
@@ -126,7 +133,6 @@ export class CustomVideoPlayerComponent implements OnInit {
     if (!this.isPlay) {
       this.videoPlayer.nativeElement.play();
       this.timer = setInterval(() => {
-        // console.log(moment.duration((this.videoPlayer.nativeElement.currentTime < 1 ? 1 : 0), 'seconds').format())
         this.currentTime = moment.duration((this.videoPlayer.nativeElement.currentTime < 1 ? 1 : this.videoPlayer.nativeElement.currentTime), 'seconds').format();
       }, 1000 / this.videoSpeed)
     } else {
@@ -197,7 +203,8 @@ export class CustomVideoPlayerComponent implements OnInit {
   }
 
   // 打開設定
-  speedSetting() {
+  speedSetting(e: any) {
+    e.stopPropagation()
     this.showSetting = !this.showSetting;
   }
 
@@ -215,14 +222,6 @@ export class CustomVideoPlayerComponent implements OnInit {
     this.imageBlob = this.base64toBlob(this.image)
     this.imageBlob.subscribe(res => {
         this.file = new File([res], 'asd', { type: 'image/png' })
-        this.uploadImageService.uploadImage(this.file).subscribe({
-          next: (res) => {console.log(res);
-          },
-          error: (err) => {console.error(err)},
-          complete: () => {
-            console.log('complete!!')
-          }
-        })
     })
   }
 
@@ -233,18 +232,6 @@ export class CustomVideoPlayerComponent implements OnInit {
         .then(blob => blob)
     )
     return blob
-
-    // return blob
-    // const canvas = this.renderer.createElement('canvas');
-    // const ctx = canvas.getContext('2d');
-    // const img = new Image();
-    // img.onload = () => {
-    //   canvas.height = img.height;
-    //   canvas.width = img.width;
-    //   ctx.drawImage(img, 0, 0)
-    //   const dataURL = canvas.toDataURL('image/png');
-    //   console.log(dataURL)
-    // }
   }
 
   // 跳至marker時間點
