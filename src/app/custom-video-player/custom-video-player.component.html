@@ -1,7 +1,7 @@
 
-<div class="video-wrapper" style="display: flex;align-items: flex-end;">
-  <div #videoWindow style="position: relative;min-width:600px;">
-    <video class="video-player" style="width:100%;" #videoPlayer poster="assets/big_buck_bunny.jpg" (click)="playVideo()" preload="auto">
+<div class="video-wrapper" style="display: flex;align-items: flex-end;margin-bottom:20px;">
+  <div #videoWindow style="position: relative;min-width:800px;">
+    <video class="video-player" style="width:100%;" #videoPlayer autoplay poster="assets/images/big_buck_bunny.jpg" (click)="playVideo()" preload="auto">
       <source src="assets/big_buck_bunny_720p_surround.mp4" type="video/mp4">
       Your browser does not support the video tag.
   </video>
@@ -14,8 +14,6 @@
     <button *ngIf="!isPlay" mat-fab style="width:60px;height:60px;display: flex;align-items: center;justify-content: center;">
       <mat-icon>play_arrow</mat-icon>
     </button>
-    <!-- <mat-progress-bar style="width:50%;" *ngIf="isLoading" mode="buffer"></mat-progress-bar> -->
-    <!-- <mat-progress-bar *ngIf="isLoading" mode="determinate" value="40"></mat-progress-bar> -->
     <mat-spinner color="accent" *ngIf="isLoading"></mat-spinner>
   </div>
   <div class="video-tools">
@@ -72,7 +70,6 @@
                 <button mat-menu-item (click)="setPlaySpeed(1.75)">1.75</button>
               </mat-menu> -->
               <div class="speed-setting" *ngIf="showSetting">
-                  <!-- <h4 style="padding:8px 12px;border-bottom:1px solid #fff">Play Speed</h4> -->
                   <ul>
                       <li (click)="setPlaySpeed(0.25)">0.25</li>
                       <li (click)="setPlaySpeed(0.5)">0.5</li>
@@ -103,7 +100,7 @@
     <!-- 時間 -->
     <p>time: {{marker.currentTime}}</p>
     <textarea rows="4" style="width:100%;max-width:200px;max-height:80px;" placeholder="備註"></textarea>
-    <mat-card-actions align="right">
+    <mat-card-actions align="end">
       <button mat-raised-button style="width:40px !important;height:40px;padding: 0" (click)="deleteFragment(i)">
         <mat-icon>delete</mat-icon>
       </button>

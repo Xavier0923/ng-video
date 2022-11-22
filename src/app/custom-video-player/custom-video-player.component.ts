@@ -1,15 +1,6 @@
 import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import 'moment-duration-format'
-import { from, Observable } from 'rxjs';
-import { UploadImageService } from '../upload-image.service';
-
-// interface BrowserFullScreen extends Document {
-//   exitFullscreen: () => Promise<void>;
-//   mozCancelFullScreen: () => Promise<void>;
-//   webkitExitFullscreen: () => Promise<void>;
-//   msExitFullscreen: () => Promise<void>;
-// }
 
 interface VideoMarker {
   imgSrc: string,
@@ -24,30 +15,29 @@ interface VideoMarker {
 })
 export class CustomVideoPlayerComponent implements OnInit {
 
-  title = 'video-test';
-  isPlay: boolean = false;
+  isPlay = false;
   volume: number | null = 50;
-  isMuted: boolean = false;
-  totalSecondTime: number;
-  totalTime: string = '';
-  currentTime: string = '0:00'
-  showSetting: boolean = false;
-  videoSpeed: number = 1;
-  sliderTime: number = 0;
-  timer: ReturnType<typeof setInterval>;
-  isError: boolean;
-  isFullScreen: boolean = false;
-  isLoading: boolean = false;
+  isMuted = false;
+  totalSecondTime = 0;
+  totalTime = '';
+  currentTime = '0:00'
+  showSetting = false;
+  videoSpeed = 1;
+  sliderTime = 0;
+  timer!: ReturnType<typeof setInterval>;
+  isError = false;
+  isFullScreen = false;
+  isLoading = false;
 
-  canvas: HTMLCanvasElement;
+  canvas!: HTMLCanvasElement;
   videoMarkers: VideoMarker[] = [];
-  image: string;
-  imageBlob: Observable<Blob>;
-  file: File;
+  image = '';
+  file!: File;
+  imageIndex = 0;
   @ViewChild('videoPlayer') videoPlayer!: ElementRef;
   @ViewChild('videoWindow') videoWindow!: ElementRef;
 
-  constructor(private renderer: Renderer2, private uploadImageService: UploadImageService) { }
+  constructor(private renderer: Renderer2) { }
 
   ngOnInit(): void {
   }
@@ -66,25 +56,27 @@ export class CustomVideoPlayerComponent implements OnInit {
 
     // 監聽更新時間
     this.renderer.listen(this.videoPlayer.nativeElement, 'timeupdate', () => {
+      console.log('timeupdate')
+      // 更新當前時間
+      this.timer = setInterval(() => {
+        // this.currentTime = moment.duration((this.videoPlayer.nativeElement.currentTime < 1 ? 1 : this.videoPlayer.nativeElement.currentTime), 'seconds').format();
+        this.currentTime = moment.duration((this.videoPlayer.nativeElement.currentTime), 'seconds').format();
+      }, 1000 / this.videoSpeed)
       // 當前毫秒
       this.sliderTime = this.videoPlayer.nativeElement.currentTime;
       // 預載寫入畫布
-      console.log(this.videoPlayer.nativeElement.width)
       this.renderer.setAttribute(this.canvas, 'width', '1600');
       this.renderer.setAttribute(this.canvas, 'height', '900');
-      // this.canvas.width = this.videoPlayer.nativeElement.width;
-      // this.canvas.height = this.videoPlayer.nativeElement.height;
-      let ctx = this.canvas.getContext('2d');
+      const ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
       ctx.drawImage(this.videoPlayer.nativeElement, 0, 0, 1600, 900);
       this.image = this.canvas.toDataURL('image/png');
-      // console.log(this.image)
     })
 
     // 緩衝中
     this.renderer.listen(this.videoPlayer.nativeElement, 'waiting', () => {
       console.log('waiting')
       this.isLoading = true;
-      this.isPlay = true;
+      // this.isPlay = true;
     })
 
     // 播放中
@@ -97,14 +89,13 @@ export class CustomVideoPlayerComponent implements OnInit {
     // 是否可以播放
     this.videoPlayer.nativeElement.oncanplay = () => {
       console.log('oncanplay')
-      this.isPlay = false;
     }
 
     // 開始載入
     this.videoPlayer.nativeElement.onloadstart = () => {
       console.log('onloadstart')
       this.isLoading = true;
-      this.isPlay = true;
+      this.isPlay = false;
     }
 
     this.renderer.listen(window, 'click', () => {
@@ -132,17 +123,13 @@ export class CustomVideoPlayerComponent implements OnInit {
   playVideo() {
     if (!this.isPlay) {
       this.videoPlayer.nativeElement.play();
-      this.timer = setInterval(() => {
-        this.currentTime = moment.duration((this.videoPlayer.nativeElement.currentTime < 1 ? 1 : this.videoPlayer.nativeElement.currentTime), 'seconds').format();
-      }, 1000 / this.videoSpeed)
     } else {
       this.videoPlayer.nativeElement.pause();
       clearInterval(this.timer);
+      this.isLoading = false;
     }
     this.isPlay = !this.isPlay;
-
   }
-
   // 快轉/倒退
   dataSkip(value: number) {
     if (value > 0) {
@@ -219,19 +206,30 @@ export class CustomVideoPlayerComponent implements OnInit {
   getVideoMarker() {
     console.log(this.currentTime)
     this.videoMarkers.push({ imgSrc: this.image, currentTime: this.currentTime, secondTime: this.videoPlayer.nativeElement.currentTime })
-    this.imageBlob = this.base64toBlob(this.image)
-    this.imageBlob.subscribe(res => {
-        this.file = new File([res], 'asd', { type: 'image/png' })
-    })
+    this.file = this.base64toFile(this.image);
+    // this.downloadFile();
   }
 
-  base64toBlob(imgBase64: string) {
-    const blob = from(
-      fetch(imgBase64)
-        .then(res => res.blob())
-        .then(blob => blob)
-    )
-    return blob
+  base64toFile(dataURI: string) {
+      // 分割数据
+      const [meta, data] = dataURI.split(',')
+      // 对数据编码
+      let byte
+      if (meta.includes('base64')) {
+        byte = atob(data)
+      } else {
+        byte = encodeURI(data)
+      }
+      // 获取图片格式
+      const mime = meta.split(':')[1].split(';')[0]
+      // 创建 8 位无符号整型数组
+      const ia = new Uint8Array(byte.length)
+      // 获取字符 UTF-16 编码值
+      for (let i = 0; i < byte.length; i++) {
+        ia[i] = Number(byte.codePointAt(i))
+      }
+      // 生成文件对象
+      return new File([ia], `${moment().format('yyyy/MM/DD hh:mm')}截圖-${this.imageIndex}.png`, { type: mime })
   }
 
   // 跳至marker時間點
@@ -243,5 +241,11 @@ export class CustomVideoPlayerComponent implements OnInit {
   deleteFragment(index: number) {
     this.videoMarkers.splice(index, 1)
   }
+
+  // downloadFile(){
+  //   const a = this.renderer.createElement('a')
+  //   a.href = this.file;
+  //   a.click();
+  // }
 
 }
