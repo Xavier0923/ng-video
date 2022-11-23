@@ -1,3 +1,4 @@
+import { UploadImageService } from './../upload-image.service';
 import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import 'moment-duration-format'
@@ -34,12 +35,15 @@ export class CustomVideoPlayerComponent implements OnInit {
   image = '';
   file!: File;
   imageIndex = 0;
-  @ViewChild('videoPlayer') videoPlayer!: ElementRef;
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
   @ViewChild('videoWindow') videoWindow!: ElementRef;
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2, private uploadImageService: UploadImageService) { }
 
   ngOnInit(): void {
+    // this.uploadImageService.getFile().subscribe((res) => {
+    //   console.log(res);
+    // })
   }
 
   ngAfterViewInit(): void {
@@ -148,16 +152,15 @@ export class CustomVideoPlayerComponent implements OnInit {
 
   // 聲音大小聲
   volumeControl(event: any) {
-    console.log(event.value)
-    this.renderer.setProperty(this.videoPlayer.nativeElement, 'volume', event.value / 100)
-    this.isMuted = event.value === 0 ? true : false;
+    this.renderer.setProperty(this.videoPlayer.nativeElement, 'volume', event.target.value / 100)
+    this.isMuted = event.target.value === 0 ? true : false;
   }
 
   // 移動時間點
   timeControl(event: any) {
     // 進度條
-    this.currentTime = this.videoPlayer.nativeElement.currentTime > 0 ? moment.duration(event.value, 'seconds').format() : '0:00';
-    this.renderer.setProperty(this.videoPlayer.nativeElement, 'currentTime', event.value)
+    this.currentTime = this.videoPlayer.nativeElement.currentTime > 0 ? moment.duration(event.target.value, 'seconds').format() : '0:00';
+    this.renderer.setProperty(this.videoPlayer.nativeElement, 'currentTime', event.target.value)
   }
 
   // 放大/縮小

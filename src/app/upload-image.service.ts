@@ -8,14 +8,11 @@ import { Observable } from 'rxjs';
 })
 export class UploadImageService {
 
-  fileUrl = 'http://127.0.0.1:8080/'
+  fileUrl = 'file://10.227.24.121/low_resolution/2022/202209/20220901/202209010001/202209010001_thumbnail.jpg'
 
   constructor(private http: HttpClient) { }
 
-  uploadImage(file: File): Observable<HttpResponse<any>>{
-    console.log(file)
-    const formData = new FormData()
-    formData.append('file', file)
-    return this.http.post<any>(this.fileUrl, formData);
+  getFile(){
+    return this.http.get<any>(this.fileUrl);
   }
 }

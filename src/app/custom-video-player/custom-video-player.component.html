@@ -1,8 +1,8 @@
 
 <div class="video-wrapper" style="display: flex;align-items: flex-end;margin-bottom:20px;">
   <div #videoWindow style="position: relative;min-width:800px;">
-    <video class="video-player" style="width:100%;" #videoPlayer autoplay poster="assets/images/big_buck_bunny.jpg" (click)="playVideo()" preload="auto">
-      <source src="assets/big_buck_bunny_720p_surround.mp4" type="video/mp4">
+    <video class="video-player" style="width:100%;" #videoPlayer crossOrigin="Anonymous" poster="assets\big_buck_bunny.jpg" (click)="playVideo()" preload="auto">
+      <source src="\\10.227.24.121\\low_resolution\\2022\\202209\\20220901\\202209010001\\big_buck_bunny_720p_surround.mp4" type="video/mp4">
       Your browser does not support the video tag.
   </video>
   <!-- 失敗 -->
@@ -19,7 +19,8 @@
   <div class="video-tools">
       <!-- 影片進度(上排) -->
       <div class="video-progress">
-          <mat-slider min="0" [max]="totalSecondTime" aria-label="units" (input)="timeControl($event)" [value]="sliderTime"></mat-slider>
+          <!-- <mat-slider min="0" [max]="totalSecondTime" aria-label="units" (input)="timeControl($event)" [value]="sliderTime"></mat-slider> -->
+          <input style="width:100%;background: #ff4081;" type="range" min="0" [max]="totalSecondTime" [value]="sliderTime" (change)="timeControl($event)">
       </div>
       <!-- 左邊功能列(下排) -->
       <div class="video-features">
@@ -47,7 +48,8 @@
                   <mat-icon>volume_off</mat-icon>
               </button>
               <div class="volume-control">
-                  <mat-slider thumbLabel step="1" min="0" max="100" aria-label="units" (input)="volumeControl($event)" [value]="volume"></mat-slider>
+                <input type="range" min="0" max="100" style="width:80px;background: #ff4081;" [value]="volume" (change)="volumeControl($event)">
+                  <!-- <mat-slider thumbLabel step="1" min="0" max="100" aria-label="units" (input)="volumeControl($event)" [value]="volume"></mat-slider> -->
               </div>
               <!-- 時間 -->
               <div class="video-time">
