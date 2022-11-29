@@ -1,113 +1,56 @@
-
-<div class="video-wrapper" style="display: flex;align-items: flex-end;margin-bottom:20px;">
-  <div #videoWindow style="position: relative;min-width:800px;">
-    <video class="video-player" style="width:100%;" #videoPlayer crossOrigin="Anonymous" poster="assets\big_buck_bunny.jpg" (click)="playVideo()" preload="auto">
-      <source src="\\10.227.24.121\\low_resolution\\2022\\202209\\20220901\\202209010001\\big_buck_bunny_720p_surround.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-  </video>
-  <!-- 失敗 -->
-  <!-- <div *ngIf="" style="width:100%;height:100%;">
-    <img src="assets/want-want.error.gif" alt="">
-  </div> -->
-  <!-- big play button -->
-  <div *ngIf="!isPlay || isLoading" (click)="playVideo()" style="width:100%;height:100%;position: absolute;top:0;right:0;left:0;bottom:0;background-color: rgba(0, 0, 0, 0.3);display: flex;align-items: center;justify-content: center;">
-    <button *ngIf="!isPlay" mat-fab style="width:60px;height:60px;display: flex;align-items: center;justify-content: center;">
-      <mat-icon>play_arrow</mat-icon>
-    </button>
-    <mat-spinner color="accent" *ngIf="isLoading"></mat-spinner>
-  </div>
-  <div class="video-tools">
-      <!-- 影片進度(上排) -->
-      <div class="video-progress">
-          <!-- <mat-slider min="0" [max]="totalSecondTime" aria-label="units" (input)="timeControl($event)" [value]="sliderTime"></mat-slider> -->
-          <input style="width:100%;background: #ff4081;" type="range" min="0" [max]="totalSecondTime" [value]="sliderTime" (change)="timeControl($event)">
-      </div>
-      <!-- 左邊功能列(下排) -->
-      <div class="video-features">
-          <div class="video-features-control">
-              <button class="replay-10" mat-button style="width:40px;" (click)="dataSkip(-10)">
-                  <mat-icon>fast_rewind</mat-icon>
-              </button>
-              <button class="replay" mat-button>
-                  <mat-icon>replay</mat-icon>
-              </button>
-              <button class="pause" mat-button (click)="playVideo()" *ngIf="isPlay">
-                  <mat-icon>pause</mat-icon>
-              </button>
-              <button class="play-arrow" mat-button (click)="playVideo()" *ngIf="!isPlay">
-                  <mat-icon>play_arrow</mat-icon>
-              </button>
-              <button class="forward-10" mat-button (click)="dataSkip(10)">
-                  <mat-icon>fast_forward</mat-icon>
-              </button>
-              <!-- 音量 -->
-              <button class="volume-up" mat-button (click)="volumeMuted()" *ngIf="!isMuted">
-                  <mat-icon>volume_up</mat-icon>
-              </button>
-              <button class="volume-off" mat-button (click)="volumeMuted()" *ngIf="isMuted">
-                  <mat-icon>volume_off</mat-icon>
-              </button>
-              <div class="volume-control">
-                <input type="range" min="0" max="100" style="width:80px;background: #ff4081;" [value]="volume" (change)="volumeControl($event)">
-                  <!-- <mat-slider thumbLabel step="1" min="0" max="100" aria-label="units" (input)="volumeControl($event)" [value]="volume"></mat-slider> -->
-              </div>
-              <!-- 時間 -->
-              <div class="video-time">
-                  <span>{{currentTime}}</span> / <span>{{totalTime}}</span>
-              </div>
-          </div>
-          <!-- 右邊功能 -->
-          <div class="video-features-setting">
-              <span style="margin-right:5px;" *ngIf="videoSpeed !== 1">Speed: {{videoSpeed}}</span>
-              <button class="settings" mat-button (click)="speedSetting($event)">
-                  <mat-icon>speed</mat-icon>
-              </button>
-              <!-- <mat-menu #speedMenu="matMenu" yPosition="above">
-                <button mat-menu-item (click)="setPlaySpeed(0.25)">0.25</button>
-                <button mat-menu-item (click)="setPlaySpeed(0.5)">0.5</button>
-                <button mat-menu-item (click)="setPlaySpeed(0.75)">0.75</button>
-                <button mat-menu-item (click)="setPlaySpeed(1)">Normal</button>
-                <button mat-menu-item (click)="setPlaySpeed(1.25)">1.25</button>
-                <button mat-menu-item (click)="setPlaySpeed(1.5)">1.5</button>
-                <button mat-menu-item (click)="setPlaySpeed(1.75)">1.75</button>
-              </mat-menu> -->
-              <div class="speed-setting" *ngIf="showSetting">
-                  <ul>
-                      <li (click)="setPlaySpeed(0.25)">0.25</li>
-                      <li (click)="setPlaySpeed(0.5)">0.5</li>
-                      <li (click)="setPlaySpeed(0.75)">0.75</li>
-                      <li (click)="setPlaySpeed(1)">Normal</li>
-                      <li (click)="setPlaySpeed(1.25)">1.25</li>
-                      <li (click)="setPlaySpeed(1.5)">1.5</li>
-                      <li (click)="setPlaySpeed(1.75)">1.75</li>
-                  </ul>
-              </div>
-              <button class="zoom-out-map" *ngIf="!isFullScreen" mat-button (click)="fullScreen()">
-                  <mat-icon>zoom_out_map</mat-icon>
-              </button>
-              <button class="zoom-in-map" *ngIf="isFullScreen" mat-button (click)="fullScreen()">
-                  <mat-icon>zoom_in_map</mat-icon>
-              </button>
-          </div>
-      </div>
-  </div>
-</div>
-<button mat-raised-button color="primary" style="min-width:100px !important;" (click)="getVideoMarker()">擷取畫面</button>
-<mat-card style="display: flex;align-items: flex-start;min-width:300px;height: 300px;overflow: auto;">
-  <div style="margin-right:10px;width:200px;" *ngFor="let marker of videoMarkers;let i = index;">
-    <!-- 圖片 -->
-    <div style="width:200px;height:120px;">
-      <img style="width:100%;height:100%;object-fit: cover;" [src]="marker.imgSrc" alt="" (click)="jumpSpecifiedFragment(marker.secondTime)">
+<div class="video-wrapper">
+  <!-- 影片視窗 -->
+  <div #videoWindow class="video-window">
+    <!-- 撥放器 -->
+    <video #videoPlayer class="video-player" preload="auto" poster="assets/20220901/202209010001_thumbnail.jpg">
+      <source src="assets\20220901\202209010001.mp4" type="video/mp4">
+    </video>
+    <!-- big play button -->
+    <div class="big-play-btn" *ngIf="!isPlay" (click)="playVideo()">
+      <button mat-fab color="primary"><mat-icon>play_arrow</mat-icon></button>
     </div>
-    <!-- 時間 -->
-    <p>time: {{marker.currentTime}}</p>
-    <textarea rows="4" style="width:100%;max-width:200px;max-height:80px;" placeholder="備註"></textarea>
-    <mat-card-actions align="end">
-      <button mat-raised-button style="width:40px !important;height:40px;padding: 0" (click)="deleteFragment(i)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </mat-card-actions>
+    <!-- 控制項 -->
+    <div class="video-controls">
+      <!-- 時間進度條 -->
+      <div class="video-progress">
+        <input type="range" min="0" style="width:100%;" [value]="progressTime"/>
+      </div>
+      <div class="video-feature">
+        <div style="display: flex;align-items: center;">
+          <button mat-button (click)="videoSkip(-10)"><mat-icon>fast_rewind</mat-icon></button>
+          <button mat-button>
+            <mat-icon *ngIf="!isPlay" (click)="playVideo()">play_arrow</mat-icon>
+            <mat-icon *ngIf="isPlay" (click)="playVideo()">pause</mat-icon>
+          </button>
+          <button mat-button (click)="videoSkip(10)"><mat-icon>fast_forward</mat-icon></button>
+          <button mat-button (click)="volumeMuted()">
+            <mat-icon *ngIf="!isMuted">volume_up</mat-icon>
+            <mat-icon *ngIf="isMuted">volume_off</mat-icon>
+          </button>
+          <div style="display: flex;align-content: center;width: 80px;">
+            <input style="width:80px;" type="range" min="0" max="100" step="1" [value]="volume">
+          </div>
+        </div>
+        <div>
+          <button mat-button><mat-icon>speed</mat-icon></button>
+          <button mat-button><mat-icon>fullscreen</mat-icon></button>
+          <button mat-button><mat-icon>fullscreen_exit</mat-icon></button>
+        </div>
+      </div>
+    </div>
   </div>
-</mat-card>
+  <!-- 擷取按鈕 -->
+  <button mat-raised-button color="primary">擷取畫面</button>
+  <!-- 擷取紀錄 -->
+  <div>
+    <mat-card>
+      <button mat-icon-button><mat-icon>delete</mat-icon></button>
+      <mat-card-content>
+        <img mat-card-image src="">
+        <p></p>
+        <textarea name="" id="" cols="30" rows="5"></textarea>
+      </mat-card-content>
+    </mat-card>
+  </div>
 
 </div>
