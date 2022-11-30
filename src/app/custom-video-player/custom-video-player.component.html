@@ -1,8 +1,8 @@
 <div class="video-wrapper">
   <!-- 影片視窗 -->
-  <div #videoWindow class="video-window">
+  <div #videoWindow class="video-window" tabindex="-1">
     <!-- 撥放器 -->
-    <video #videoPlayer class="video-player" preload="auto" poster="assets/20220901/202209010001_thumbnail.jpg">
+    <video #videoPlayer class="video-player" preload="auto" poster="assets/20220901/202209010001_thumbnail.jpg" (click)="playVideo()">
       <source src="assets\20220901\202209010001.mp4" type="video/mp4">
     </video>
     <!-- big play button -->
@@ -12,8 +12,8 @@
     <!-- 控制項 -->
     <div class="video-controls">
       <!-- 時間進度條 -->
-      <div class="video-progress">
-        <input type="range" min="0" style="width:100%;" [value]="progressTime"/>
+      <div #videoProgress class="video-progress">
+        <input type="range" min="0" [max]="durationTime" style="width:100%;" [value]="progressTime" (input)="timeControl($event)" />
       </div>
       <div class="video-feature">
         <div style="display: flex;align-items: center;">
@@ -28,29 +28,49 @@
             <mat-icon *ngIf="isMuted">volume_off</mat-icon>
           </button>
           <div style="display: flex;align-content: center;width: 80px;">
-            <input style="width:80px;" type="range" min="0" max="100" step="1" [value]="volume">
+            <input style="width:80px;" type="range" min="0" max="100" step="1" [value]="volume" (input)="volumeControl($event)">
+          </div>
+          <div style="color:#fff;margin-left:10px;">
+            <span>{{currentTime}}</span> / <span>{{totalTime}}</span>
           </div>
         </div>
         <div>
-          <button mat-button><mat-icon>speed</mat-icon></button>
-          <button mat-button><mat-icon>fullscreen</mat-icon></button>
-          <button mat-button><mat-icon>fullscreen_exit</mat-icon></button>
+          <!-- 速度選單 -->
+          <div #speedSetting class="speed-setting">
+            <ul>
+                <li (click)="speedControl(0.25)">0.25</li>
+                <li (click)="speedControl(0.5)">0.5</li>
+                <li (click)="speedControl(0.75)">0.75</li>
+                <li (click)="speedControl(1)">Normal</li>
+                <li (click)="speedControl(1.25)">1.25</li>
+                <li (click)="speedControl(1.5)">1.5</li>
+                <li (click)="speedControl(1.75)">1.75</li>
+            </ul>
+          </div>
+          <button mat-button class="speed-btn" (click)="openSpeedSetting()"><mat-icon>speed</mat-icon></button>
+          <button mat-button (click)="fullScreen()">
+            <mat-icon *ngIf="!isFullScreen">fullscreen</mat-icon>
+            <mat-icon *ngIf="isFullScreen">fullscreen_exit</mat-icon>
+          </button>
         </div>
       </div>
     </div>
   </div>
   <!-- 擷取按鈕 -->
-  <button mat-raised-button color="primary">擷取畫面</button>
+  <button mat-raised-button color="primary" (click)="captureFragment()">擷取畫面</button>
   <!-- 擷取紀錄 -->
-  <div>
-    <mat-card>
-      <button mat-icon-button><mat-icon>delete</mat-icon></button>
+  <div style="max-width:600px;display:flex;overflow: auto;padding:20px;">
+    <mat-card style="margin:10px;" *ngFor="let fragment of editVideoFragments;let i = index">
+      <button mat-mini-fab color="primary" style="position:absolute;right:-20px;top:-20px;" (click)="deleteFragment(i)"><mat-icon>delete</mat-icon></button>
       <mat-card-content>
-        <img mat-card-image src="">
-        <p></p>
-        <textarea name="" id="" cols="30" rows="5"></textarea>
+        <img mat-card-image [src]="fragment.imgUrl" (click)="jumpSpecifiedFragment(fragment.secondsTime)">
+        <p>time: {{fragment.currentTime}}</p>
+        <textarea name="" id="" cols="30" rows="5" [value]="fragment.remark"></textarea>
       </mat-card-content>
     </mat-card>
   </div>
+
+</div>
+<div #testDom>
 
 </div>
