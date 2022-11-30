@@ -6,78 +6,107 @@
 .video-wrapper {
   display:flex;
   align-items: flex-end;
-}
 
-.video-window {
-  width:640px;
-  position: relative;
-}
+  .video-window {
+    min-width:640px;
+    height: 360px;
+    position: relative;
 
-.video-player {
-  width: 100%;
-  height: 100%;
-}
+    &:hover .video-controls{
+      opacity: 1;
+      transition: opacity .2s;
+      transition-delay:0s;
+    }
 
-.big-play-btn{
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
-.video-controls {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-}
-
-.video-progress{
-  padding: 0 5px;
-}
-
-.video-feature {
-  position: relative;
-  display:flex;
-  align-items: center;
-  justify-content: space-between;
-  background-image: linear-gradient(to top, rgb(53, 48, 48), transparent 100%);
-
-  button {
-    color: #fff;
-    padding: 0;
-    min-width:40px !important;
-  }
-
-  .speed-setting{
-    position: absolute;
-    bottom: 56px;
-    right: 50px;
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 5px 10px;
-    width: 60px;
-    visibility: hidden;
-
-    li{
-      list-style-type: none;
-      color: #fff;
-      height: 30px;
-      line-height: 30px;
-      cursor: pointer;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.6);
-        color: #000;
+    .video-player {
+      width: 100%;
+      height: 100%;
+      &:hover .video-controls{
+        opacity: 1;
+        transition: opacity .2s;
+        transition-delay:0s;
       }
     }
+
+    .big-play-btn{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .video-controls {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 2s;
+      transition-delay:3s;
+
+      .video-progress{
+        padding: 0 5px;
+      }
+
+      .video-feature {
+        position: relative;
+        display:flex;
+        align-items: center;
+        justify-content: space-between;
+        background-image: linear-gradient(to top, rgb(53, 48, 48), transparent 100%);
+
+        button {
+          color: #fff;
+          padding: 0;
+          min-width:40px !important;
+        }
+
+        .speed-setting{
+          position: absolute;
+          bottom: 56px;
+          right: 50px;
+          background-color: rgba(0, 0, 0, 0.6);
+          padding: 5px 10px;
+          width: 60px;
+          visibility: hidden;
+
+          li{
+            list-style-type: none;
+            color: #fff;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+
+            &:hover {
+              background: rgba(255, 255, 255, 0.6);
+              color: #000;
+            }
+          }
+        }
+
+      }
+    }
+
+
   }
 
 }
+
+
+
+
+
+
+
+
+
+
+
 
 

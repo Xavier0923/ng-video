@@ -51,8 +51,6 @@ export class CustomVideoPlayerComponent implements OnInit {
   @ViewChild('speedSetting') speedSetting: ElementRef;
   @ViewChild('videoProgress') videoProgress: ElementRef;
 
-  @ViewChild('testDom') testDom: ElementRef;
-
   // api 來的
   videoFragments: VideoFragments;
 
@@ -121,7 +119,7 @@ export class CustomVideoPlayerComponent implements OnInit {
   //getData
   getData() {
     // api
-    let data = '{"url":"assets/20220901/","fragments":[{"imgName":"202209010001_00001700.png","currentTime":"00:00:17.000","secondsTime":17,"remark":"asd"},{"imgName":"202209010001_00014700.png","currentTime":"00:01:47.455","secondsTime":107.455498,"remark":"zxc"},{"imgName":"202209010001_00025400.png","currentTime":"00:02:54.000","secondsTime":174,"remark":"zxc"},{"imgName":"202209010001_00025400.png","currentTime":"00:01:40.950","secondsTime":100.950533,"remark":"zxc"}]}'
+    const data = '{"url":"assets/20220901/","fragments":[{"imgName":"202209010001_00001700.png","currentTime":"00:00:17.000","secondsTime":17,"remark":"asd"},{"imgName":"202209010001_00014700.png","currentTime":"00:01:47.455","secondsTime":107.455498,"remark":"zxc"},{"imgName":"202209010001_00025400.png","currentTime":"00:02:54.000","secondsTime":174,"remark":"zxc"},{"imgName":"202209010001_00025400.png","currentTime":"00:01:40.950","secondsTime":100.950533,"remark":"zxc"}]}'
     this.videoFragments = JSON.parse(data);
     // 維護
     this.editVideoFragments = this.videoFragments.fragments.map((fg) => {
@@ -210,7 +208,6 @@ export class CustomVideoPlayerComponent implements OnInit {
   // 擷取片段
   captureFragment() {
     console.log(this.base64Url);
-    this.testDom.nativeElement.appendChild(this.canvas);
     this.file = this.base64toFile();
     console.log(this.file)
     this.editVideoFragments.push({
@@ -242,7 +239,7 @@ export class CustomVideoPlayerComponent implements OnInit {
     for (let i = 0; i < byte.length; i++) {
         ia[i] = Number(byte.codePointAt(i))
     }
-    let index = String(this.imageIndex + 1).padStart(4, '0')
+    const index = String(this.imageIndex + 1).padStart(4, '0')
 
     console.log(index)
     // 生成文件对象
@@ -256,7 +253,7 @@ export class CustomVideoPlayerComponent implements OnInit {
   }
 
   // 刪除fragment
-  deleteFragment(index) {
+  deleteFragment(index: number) {
     this.editVideoFragments.splice(index, 1)
     console.log(this.editVideoFragments)
   }
