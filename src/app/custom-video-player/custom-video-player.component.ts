@@ -97,6 +97,46 @@ export class CustomVideoPlayerComponent implements OnInit {
       // 處理緩衝
     })
 
+    // end
+    this.renderer.listen(this.videoPlayer.nativeElement, 'ended', () => {
+      console.log('ended');
+     })
+
+    // 加載中止
+    this.renderer.listen(this.videoPlayer.nativeElement, 'abort', () => {
+     console.log('abort')
+   })
+
+   // 持續時間已修改
+   this.renderer.listen(this.videoPlayer.nativeElement, 'durationchange', () => {
+     console.log('durationchange')
+   })
+
+   // 錯誤
+   this.renderer.listen(this.videoPlayer.nativeElement, 'error', () => {
+     console.log('error')
+   })
+
+   // 瀏覽器無法獲取媒體數據
+   this.renderer.listen(this.videoPlayer.nativeElement, 'stalled', () => {
+     console.log('stalled')
+   })
+
+   // 正在下載
+   this.renderer.listen(this.videoPlayer.nativeElement, 'progress', () => {
+     console.log('progress')
+   })
+
+   // 警告媒體數據的加載被阻止繼續
+   this.renderer.listen(this.videoPlayer.nativeElement, 'suspend', () => {
+     console.log('suspend')
+   })
+
+   // 加載視頻的元數據時發出警報
+   this.renderer.listen(this.videoPlayer.nativeElement, 'loadedmetadata', () => {
+     console.log('loadedmetadata')
+   })
+
     // 針對不同瀏覽器監聽全螢幕狀態
     this.renderer.listen(this.videoWindow.nativeElement, 'fullscreenchange', () => {
       this.isFullScreen = !this.isFullScreen;

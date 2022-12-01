@@ -3,6 +3,74 @@
   padding: 0;
 }
 
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 15rem;
+  // overflow: hidden;
+}
+
+/***** Chrome, Safari, Opera, and Edge Chromium *****/
+input[type="range"]::-webkit-slider-runnable-track {
+  background: #fff;
+  height: 0.5rem;
+  border-radius: 12px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  width: 16px;
+  height: 16px;
+  margin-top: -4px;
+  background: blue;
+  box-shadow: 0 0 0 0 rgba($color: blue, $alpha: .1), 1px 0px 1px rgba(0, 0, 0),;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 15px rgba($color: blue, $alpha: .2);
+}
+
+input[type="range"]::-webkit-slider-thumb::before {
+  content: 'asd';
+  position: absolute;
+  height: 50rem;
+  right: 0px;
+  background: blue;
+  margin-top: -4px;
+  width: 2000px;
+}
+
+// thumb(8/2)-(16/2)
+/******** Firefox ********/
+input[type="range"]::-moz-range-track {
+  background: #fff;
+  height: 0.5rem;
+  border-radius: 12px;
+}
+
+input[type="range"]::-moz-range-progress {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 0.5rem;
+  background: blue;
+}
+
+input[type="range"]::-moz-range-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -4px;
+  background: blue;
+  border-radius: 50%;
+}
+
 .video-wrapper {
   display:flex;
   align-items: flex-end;
@@ -52,6 +120,20 @@
 
       .video-progress{
         padding: 0 5px;
+        position: relative;
+
+        .progress-line{
+          position: absolute;
+          top: 6.5px;
+          right: 5px;
+          left: 5px;
+          width: 100%;
+          max-width: 630px;
+          height: 8px;
+          background: blue;
+          border-radius: 12px;
+        }
+
       }
 
       .video-feature {

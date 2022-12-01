@@ -4,6 +4,7 @@
     <!-- 撥放器 -->
     <video #videoPlayer class="video-player" preload="auto" poster="assets/20220901/202209010001_thumbnail.jpg" (click)="playVideo()">
       <source src="assets\20220901\202209010001.mp4" type="video/mp4">
+      Your browser does not support the video tag.
     </video>
     <!-- big play button -->
     <div class="big-play-btn" *ngIf="!isPlay" (click)="playVideo()">
@@ -13,6 +14,7 @@
     <div class="video-controls">
       <!-- 時間進度條 -->
       <div #videoProgress class="video-progress">
+        <div class="progress-line"></div>
         <input type="range" min="0" [max]="durationTime" style="width:100%;" [value]="progressTime" (input)="timeControl($event)" />
       </div>
       <div class="video-feature">
