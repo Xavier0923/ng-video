@@ -14,8 +14,8 @@
     <div class="video-controls">
       <!-- 時間進度條 -->
       <div #videoProgress class="video-progress">
-        <div class="progress-line"></div>
-        <input type="range" min="0" [max]="durationTime" style="width:100%;" [value]="progressTime" (input)="timeControl($event)" />
+        <!-- <progress min="0" [max]="durationTime" [value]="progressTime" #progressBar></progress> -->
+        <input #progressTimeInp type="range" min="0" [max]="durationTime" style="width:100%;" [value]="progressTime" (input)="timeControl($event)" />
       </div>
       <div class="video-feature">
         <div style="display: flex;align-items: center;">
@@ -29,8 +29,8 @@
             <mat-icon *ngIf="!isMuted">volume_up</mat-icon>
             <mat-icon *ngIf="isMuted">volume_off</mat-icon>
           </button>
-          <div style="display: flex;align-content: center;width: 80px;">
-            <input style="width:80px;" type="range" min="0" max="100" step="1" [value]="volume" (input)="volumeControl($event)">
+          <div class="volumeControl">
+            <input #volumeControlInp style="width:80px;" type="range" min="0" max="100" step="1" [value]="volume" (input)="volumeControl($event)">
           </div>
           <div style="color:#fff;margin-left:10px;">
             <span>{{currentTime}}</span> / <span>{{totalTime}}</span>
