@@ -32,6 +32,7 @@ export class CustomVideoPlayerComponent implements OnInit {
   isFullScreen = false;
   isError = false;
   isLoading = false;
+  isEnd = false;
 
   // 文字顯示時間
   totalTime = ''
@@ -41,12 +42,16 @@ export class CustomVideoPlayerComponent implements OnInit {
   progressTime = 0;
   // 百分比
   percentTime = 0;
+  loadedPercentage = 0;
 
   // 擷取屬性
   canvas!: HTMLCanvasElement;
   base64Url = '';
   imageIndex = 0;
   file: File;
+
+  // 讀檔測試
+  testReadFile = new FileReader();
 
   @ViewChild('videoPlayer') videoPlayer: ElementRef;
   @ViewChild('videoWindow') videoWindow: ElementRef;
@@ -73,10 +78,18 @@ export class CustomVideoPlayerComponent implements OnInit {
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
+
+    // 讀檔測試
+    this.testReadFile.onerror = () => {
+      console.log('file error')
+    }
     // 事件
     //onloadeddata
     this.renderer.listen(this.videoPlayer.nativeElement, 'loadeddata', () => {
       console.log('loadeddata')
+      this.isError = false;
+      this.isPlay = false;
+      this.isLoading = false;
       // 給進度調時間使用
       this.durationTime = this.videoPlayer.nativeElement.duration;
       this.progressTime = 0;
@@ -89,7 +102,7 @@ export class CustomVideoPlayerComponent implements OnInit {
       console.log('timeupdate')
       this.progressTime = this.videoPlayer.nativeElement.currentTime;
       this.currentTime = this.videoPlayer.nativeElement.currentTime < 1 ? '0:00' : moment.duration(this.videoPlayer.nativeElement.currentTime, 'seconds').format({ trunc: true })
-      this.renderer.setStyle(this.progressTimeInp.nativeElement, 'background', `linear-gradient(to right, blue ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%, #fff ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%)`)
+      this.renderer.setStyle(this.progressTimeInp.nativeElement, 'background', `linear-gradient(to right, blue ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%, rgba(173, 173, 173, 0.5) ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%)`)
       // this.percentTime = (this.progressTime / this.durationTime) * 100;
       // 預載寫入畫布
       this.canvas = this.renderer.createElement('canvas');
@@ -100,51 +113,74 @@ export class CustomVideoPlayerComponent implements OnInit {
       this.base64Url = this.canvas.toDataURL()
 
     })
+    // playing
+    this.renderer.listen(this.videoPlayer.nativeElement, 'playing', () => {
+      console.log('playing')
+      this.isError = false;
+      this.isLoading = false;
+    })
     //waiting
     this.renderer.listen(this.videoPlayer.nativeElement, 'waiting', () => {
       console.log('waiting')
+      this.isLoading = true;
+      if(this.videoPlayer.nativeElement.readyState === 0){
+        alert('影片讀取失敗');
+        this.isLoading = false;
+        this.isError = true;
+      }
       // 處理緩衝
     })
 
     // end
     this.renderer.listen(this.videoPlayer.nativeElement, 'ended', () => {
       console.log('ended');
-     })
+      this.isEnd = true;
+    })
 
     // 加載中止
     this.renderer.listen(this.videoPlayer.nativeElement, 'abort', () => {
-     console.log('abort')
-   })
+      console.log('abort')
+    })
 
-   // 持續時間已修改
-   this.renderer.listen(this.videoPlayer.nativeElement, 'durationchange', () => {
-     console.log('durationchange')
-   })
+    // 持續時間已修改
+    this.renderer.listen(this.videoPlayer.nativeElement, 'durationchange', () => {
+      console.log('durationchange')
+    })
 
-   // 錯誤
-   this.renderer.listen(this.videoPlayer.nativeElement, 'error', () => {
-     console.log('error')
-   })
+    // 錯誤
+    this.renderer.listen(this.videoPlayer.nativeElement, 'error', () => {
+      console.log('error')
+      this.isError = true;
+      this.isLoading = false;
+      this.isPlay = false;
+    })
 
-   // 瀏覽器無法獲取媒體數據
-   this.renderer.listen(this.videoPlayer.nativeElement, 'stalled', () => {
-     console.log('stalled')
-   })
+    // 視頻開始加載
+    this.renderer.listen(this.videoPlayer.nativeElement, 'loadstart', () => {
+      console.log('loadstart', this.videoPlayer.nativeElement.readyState)
+    })
 
-   // 正在下載
-   this.renderer.listen(this.videoPlayer.nativeElement, 'progress', () => {
-     console.log('progress')
-   })
 
-   // 警告媒體數據的加載被阻止繼續
-   this.renderer.listen(this.videoPlayer.nativeElement, 'suspend', () => {
-     console.log('suspend')
-   })
+    // 瀏覽器無法獲取媒體數據
+    this.renderer.listen(this.videoPlayer.nativeElement, 'stalled', () => {
+      console.log('stalled')
+    })
 
-   // 加載視頻的元數據時發出警報
-   this.renderer.listen(this.videoPlayer.nativeElement, 'loadedmetadata', () => {
-     console.log('loadedmetadata')
-   })
+    // 正在下載
+    this.renderer.listen(this.videoPlayer.nativeElement, 'progress', () => {
+      //  this.loadedPercentage = this.videoPlayer.nativeElement.buffered.end(0) / this.durationTime;
+      console.log('progress', this.loadedPercentage)
+    })
+
+    // 警告媒體數據的加載被阻止繼續
+    this.renderer.listen(this.videoPlayer.nativeElement, 'suspend', () => {
+      console.log('suspend')
+    })
+
+    // 加載視頻的元數據時發出警報
+    this.renderer.listen(this.videoPlayer.nativeElement, 'loadedmetadata', () => {
+      console.log('loadedmetadata')
+    })
 
     // 針對不同瀏覽器監聽全螢幕狀態
     this.renderer.listen(this.videoWindow.nativeElement, 'fullscreenchange', () => {
@@ -176,6 +212,18 @@ export class CustomVideoPlayerComponent implements OnInit {
       return fg;
     })
     console.log(this.editVideoFragments)
+  }
+
+  // 重新加載影片
+  reloadVideo() {
+    this.videoPlayer.nativeElement.load()
+  }
+
+  // 重新播放
+  replayVideo() {
+    this.renderer.setProperty(this.videoPlayer.nativeElement, 'currentTime', 0)
+    this.isEnd = false;
+    this.videoPlayer.nativeElement.play()
   }
 
   // 控制方法
@@ -214,7 +262,7 @@ export class CustomVideoPlayerComponent implements OnInit {
       this.isMuted = true;
     }
     this.renderer.setProperty(this.videoPlayer.nativeElement, 'volume', this.volume / 100)
-    this.renderer.setStyle(this.volumeControlInp.nativeElement, 'background', `linear-gradient(to right,blue ${this.volume}%, #fff ${this.volume}%)`)
+    this.renderer.setStyle(this.volumeControlInp.nativeElement, 'background', `linear-gradient(to right,blue ${this.volume}%, rgba(173, 173, 173, 0.5) ${this.volume}%)`)
   }
 
   // 時間軸
@@ -222,7 +270,14 @@ export class CustomVideoPlayerComponent implements OnInit {
     // console.log(event.target.value)
     this.renderer.setProperty(this.videoPlayer.nativeElement, 'currentTime', event.target.value)
     console.log(`linear-gradient: (to right, blue ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%, #fff ${((this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100).toFixed(3)}%)`)
-    this.renderer.setStyle(this.progressTimeInp.nativeElement, 'background', `linear-gradient(to right, blue ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%, #fff ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%)`)
+    this.renderer.setStyle(this.progressTimeInp.nativeElement, 'background', `linear-gradient(to right, blue ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%, rgba(173, 173, 173, 0.5) ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%)`)
+    // this.renderer.setStyle(this.progressTimeInp.nativeElement, 'background', `linear-gradient(to right,
+    //   blue 0%,
+    //   blue ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%,
+    //   #777 ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%,
+    //   #777 ${this.loadedPercentage * 100}%,
+    //   #444 ${this.loadedPercentage * 100}%,
+    //   #444 100%`);
   }
 
   // 調整速度
@@ -280,9 +335,9 @@ export class CustomVideoPlayerComponent implements OnInit {
     // 对数据编码
     let byte
     if (meta.includes('base64')) {
-        byte = atob(data)
+      byte = atob(data)
     } else {
-        byte = encodeURI(data)
+      byte = encodeURI(data)
     }
     // 获取图片格式
     const mime = meta.split(':')[1].split(';')[0]
@@ -290,7 +345,7 @@ export class CustomVideoPlayerComponent implements OnInit {
     const ia = new Uint8Array(byte.length)
     // 获取字符 UTF-16 编码值
     for (let i = 0; i < byte.length; i++) {
-        ia[i] = Number(byte.codePointAt(i))
+      ia[i] = Number(byte.codePointAt(i))
     }
     const index = String(this.imageIndex + 1).padStart(4, '0')
 

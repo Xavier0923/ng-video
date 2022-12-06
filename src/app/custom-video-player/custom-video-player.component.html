@@ -3,12 +3,29 @@
   <div #videoWindow class="video-window" tabindex="-1">
     <!-- 撥放器 -->
     <video #videoPlayer class="video-player" preload="auto" poster="assets/20220901/202209010001_thumbnail.jpg" (click)="playVideo()">
-      <source src="assets\20220901\202209010001.mp4" type="video/mp4">
+      <source src="assets\20220901\20220901000.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
     <!-- big play button -->
-    <div class="big-play-btn" *ngIf="!isPlay" (click)="playVideo()">
+    <div class="big-black-bg" *ngIf="!isPlay && !isError && !isEnd" (click)="playVideo()">
       <button mat-fab color="primary"><mat-icon>play_arrow</mat-icon></button>
+    </div>
+    <!-- the end -->
+    <div class="big-black-bg" *ngIf="isEnd" (click)="replayVideo()">
+      <button mat-fab color="primary"><mat-icon>replay</mat-icon></button>
+    </div>
+    <!-- error -->
+    <div class="big-black-bg" *ngIf="isError">
+      <img style="width: 150px;" src="assets/want-error.gif" alt="">
+      <strong style="background:#000;padding:5px;border-radius:10px;color:#fff;">影片發生錯誤 !</strong>
+      <button mat-icon-button (click)="reloadVideo()" style="color:#fff;">
+        <mat-icon>autorenew</mat-icon>
+      </button>
+    </div>
+    <!-- loading -->
+    <div class="big-black-bg" style="flex-direction:column" *ngIf="isLoading">
+        <img src="assets/cti-logo.png" alt="">
+        <mat-progress-bar style="width:150px;" mode="buffer" color="primary"></mat-progress-bar>
     </div>
     <!-- 控制項 -->
     <div class="video-controls">
@@ -20,9 +37,17 @@
       <div class="video-feature">
         <div style="display: flex;align-items: center;">
           <button mat-button (click)="videoSkip(-10)"><mat-icon>fast_rewind</mat-icon></button>
-          <button mat-button>
-            <mat-icon *ngIf="!isPlay" (click)="playVideo()">play_arrow</mat-icon>
-            <mat-icon *ngIf="isPlay" (click)="playVideo()">pause</mat-icon>
+          <button mat-button *ngIf="!isPlay && !isError && !isEnd" (click)="playVideo()">
+            <mat-icon>play_arrow</mat-icon>
+          </button>
+          <button mat-button *ngIf="isPlay && !isError && !isEnd" (click)="playVideo()">
+            <mat-icon>pause</mat-icon>
+          </button>
+          <button mat-button *ngIf="isEnd" (click)="replayVideo()">
+            <mat-icon>replay</mat-icon>
+          </button>
+          <button mat-button *ngIf="isError" (click)="reloadVideo()">
+            <mat-icon>autorenew</mat-icon>
           </button>
           <button mat-button (click)="videoSkip(10)"><mat-icon>fast_forward</mat-icon></button>
           <button mat-button (click)="volumeMuted()">
@@ -71,8 +96,5 @@
       </mat-card-content>
     </mat-card>
   </div>
-
-</div>
-<div #testDom>
 
 </div>
