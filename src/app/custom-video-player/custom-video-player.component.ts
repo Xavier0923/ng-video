@@ -69,6 +69,12 @@ export class CustomVideoPlayerComponent implements OnInit {
   // 修改
   editVideoFragments: Fragments[];
 
+  // 網址
+  // videoId = '202209010001';
+  // videoUncPath = '\\\\10.227.63.205\\low_resolution_01\\202209\\20220901\\202209010001\\';
+  videofile:unknown;
+  videoImage: unknown;
+
   constructor(private renderer: Renderer2) { }
 
   ngOnInit(): void {
@@ -102,7 +108,7 @@ export class CustomVideoPlayerComponent implements OnInit {
       console.log('timeupdate')
       this.progressTime = this.videoPlayer.nativeElement.currentTime;
       this.currentTime = this.videoPlayer.nativeElement.currentTime < 1 ? '0:00' : moment.duration(this.videoPlayer.nativeElement.currentTime, 'seconds').format({ trunc: true })
-      this.renderer.setStyle(this.progressTimeInp.nativeElement, 'background', `linear-gradient(to right, blue ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%, rgba(173, 173, 173, 0.5) ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%)`)
+      this.renderer.setStyle(this.progressTimeInp.nativeElement, 'background', `linear-gradient(to right, red ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%, rgba(173, 173, 173, 0.5) ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%)`)
       // this.percentTime = (this.progressTime / this.durationTime) * 100;
       // 預載寫入畫布
       this.canvas = this.renderer.createElement('canvas');
@@ -248,7 +254,7 @@ export class CustomVideoPlayerComponent implements OnInit {
     this.isMuted = !this.isMuted;
     // 需要將音量轉至0
     this.volume = this.isMuted ? 0 : 50;
-    this.renderer.setStyle(this.volumeControlInp.nativeElement, 'background', `linear-gradient(to right,blue ${this.volume}%, #fff ${this.volume}%)`)
+    this.renderer.setStyle(this.volumeControlInp.nativeElement, 'background', `linear-gradient(to right,#fff ${this.volume}%, rgba(173, 173, 173, 0.5) ${this.volume}%)`)
   }
 
   // 音量
@@ -262,15 +268,15 @@ export class CustomVideoPlayerComponent implements OnInit {
       this.isMuted = true;
     }
     this.renderer.setProperty(this.videoPlayer.nativeElement, 'volume', this.volume / 100)
-    this.renderer.setStyle(this.volumeControlInp.nativeElement, 'background', `linear-gradient(to right,blue ${this.volume}%, rgba(173, 173, 173, 0.5) ${this.volume}%)`)
+    this.renderer.setStyle(this.volumeControlInp.nativeElement, 'background', `linear-gradient(to right,#fff ${this.volume}%, rgba(173, 173, 173, 0.5) ${this.volume}%)`)
   }
 
   // 時間軸
   timeControl(event: any) {
     // console.log(event.target.value)
     this.renderer.setProperty(this.videoPlayer.nativeElement, 'currentTime', event.target.value)
-    console.log(`linear-gradient: (to right, blue ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%, #fff ${((this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100).toFixed(3)}%)`)
-    this.renderer.setStyle(this.progressTimeInp.nativeElement, 'background', `linear-gradient(to right, blue ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%, rgba(173, 173, 173, 0.5) ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%)`)
+    console.log(`linear-gradient: (to right, red ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%, #fff ${((this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100).toFixed(3)}%)`)
+    this.renderer.setStyle(this.progressTimeInp.nativeElement, 'background', `linear-gradient(to right, red ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%, rgba(173, 173, 173, 0.5) ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%)`)
     // this.renderer.setStyle(this.progressTimeInp.nativeElement, 'background', `linear-gradient(to right,
     //   blue 0%,
     //   blue ${(this.videoPlayer.nativeElement.currentTime / this.videoPlayer.nativeElement.duration) * 100}%,

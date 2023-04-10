@@ -2,10 +2,12 @@
   <!-- 影片視窗 -->
   <div #videoWindow class="video-window" tabindex="-1">
     <!-- 撥放器 -->
-    <video #videoPlayer class="video-player" preload="auto" poster="assets/20220901/202209010001_thumbnail.jpg" (click)="playVideo()">
-      <source src="assets\20220901\20220901000.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+    <div class="watermark">
+      <video #videoPlayer class="video-player" preload="auto" crossorigin="anonymous" poster="assets\20220901\202209010001_thumbnail.jpg" (click)="playVideo()">
+        <source src="assets\20220901\202209010001.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
     <!-- big play button -->
     <div class="big-black-bg" *ngIf="!isPlay && !isError && !isEnd" (click)="playVideo()">
       <button mat-fab color="primary"><mat-icon>play_arrow</mat-icon></button>

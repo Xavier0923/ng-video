@@ -17,6 +17,23 @@
     height: 360px;
     position: relative;
 
+    .watermark{
+      position: relative;
+    }
+
+    .watermark::before {
+      content: '';
+      position: absolute;
+      top: calc(50% - 52px);
+      right: calc(50% - 250px);
+      bottom: calc(50% - 52px);
+      left: calc(50% - 250px);
+      background: url('../../assets/ctitv-logo.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      opacity: 0.1;
+    }
+
     &:hover .video-controls {
       // opacity: 1;
       // transition: opacity .2s;
@@ -33,6 +50,7 @@
         // transition-delay: 0s;
       }
     }
+
 
     .big-black-bg {
       position: absolute;
@@ -67,7 +85,7 @@
           -webkit-appearance: none;
           background: linear-gradient(
             to right,
-            blue 0%,
+            red 0%,
             rgba(173, 173, 173, 0.5) 0%
           );
           cursor: pointer;
@@ -78,26 +96,26 @@
           width: 100%;
         }
         &:hover input[type="range"]{
-          height: 8px;
+          height: 5px;
         }
 
         input[type="range"]::-webkit-slider-thumb {
           -webkit-appearance: none;
-          background: blue;
+          background: red;
           border-radius: 8px;
-          box-shadow: 0 0 0 0 rgba($color: blue, $alpha: .2), 0 0 3px 0 rgba(0, 0, 0, 1);
+          box-shadow: 0 0 0 0 rgba($color: red, $alpha: .2), 0 0 3px 0 rgba(0, 0, 0, 1);
           height: 0;
           transition: 0.1s ease-in;
           width: 0;
         }
 
         input[type="range"]::-webkit-slider-thumb:hover {
-          box-shadow: 0 0 0 15px rgba($color: blue, $alpha: .2), 0 0 3px 0 rgba(0, 0, 0, 1);
+          box-shadow: 0 0 0 15px rgba($color: red, $alpha: .2), 0 0 3px 0 rgba(0, 0, 0, 1);
         }
 
         &:hover input[type="range"]::-webkit-slider-thumb{
-          width: 16px;
-          height: 16px;
+          width: 12px;
+          height: 12px;
         }
 
         // thumb(8/2)-(16/2)
@@ -105,22 +123,22 @@
 
         input[type="range"]::-moz-range-thumb {
           -webkit-appearance: none;
-          background: blue;
+          background: red;
           border-radius: 8px;
           border:none;
-          box-shadow: 0 0 0 0 rgba($color: blue, $alpha: .2), 0 0 3px 0 rgba(0, 0, 0, 1);
+          box-shadow: 0 0 0 0 rgba($color: red, $alpha: .2), 0 0 3px 0 rgba(0, 0, 0, 1);
           height: 0;
           transition: 0.1s ease-in;
           width: 0;
         }
 
         input[type="range"]::-moz-range-thumb:hover {
-          box-shadow: 0 0 0 15px rgba($color: blue, $alpha: .2), 0 0 3px 0 rgba(0, 0, 0, 1);
+          box-shadow: 0 0 0 15px rgba($color: red, $alpha: .2), 0 0 3px 0 rgba(0, 0, 0, 1);
         }
 
         &:hover input[type="range"]::-moz-range-thumb{
-          width: 16px;
-          height: 16px;
+          width: 12px;
+          height: 12px;
         }
 
       }
@@ -133,30 +151,30 @@
         background-image: linear-gradient(to top, rgb(53, 48, 48), transparent 100%);
 
         .volumeControl {
-
+          padding-bottom: 3px;
           input[type="range"] {
             -webkit-appearance: none;
             appearance: none;
-            background: linear-gradient(to right, blue 50%, rgba(173, 173, 173, 0.5) 50%);
+            background: linear-gradient(to right, #fff 50%, rgba(173, 173, 173, 0.5) 50%);
             cursor: pointer;
-            height: 0.5rem;
+            height: 5px;
           }
 
           /***** Chrome, Safari, Opera, and Edge Chromium *****/
           input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 16px;
-            height: 16px;
-            background: blue;
-            box-shadow: 0 0 0 0 rgba($color: blue, $alpha: .1), 0 0 3px 0 rgba(0, 0, 0, 1);
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            box-shadow: 0 0 0 0 rgba($color: #fff, $alpha: .1), 0 0 3px 0 rgba(0, 0, 0, 1);
             border-radius: 50%;
             transition: 0.3s;
             border: none;
           }
 
           input[type="range"]::-webkit-slider-thumb:hover {
-            box-shadow: 0 0 0 15px rgba($color: blue, $alpha: .2), 0 0 3px 0 rgba(0, 0, 0, 1);
+            box-shadow: 0 0 0 15px rgba($color: #fff, $alpha: .2), 0 0 3px 0 rgba(0, 0, 0, 1);
           }
 
           // thumb(8/2)-(16/2)
@@ -164,26 +182,26 @@
           input[type="range"]::-moz-range-progress {
             -webkit-appearance: none;
             appearance: none;
-            height: 8px;
+            height: 5px;
             border-radius: 12px 0 0 12px;
-            background: blue;
+            background: #fff;
           }
 
           input[type="range"]::-moz-range-thumb {
             -webkit-appearance: none;
             appearance: none;
             position: relative;
-            width: 20px;
-            height: 20px;
-            background: blue;
-            box-shadow: 0 0 0 0 rgba($color: blue, $alpha: .1), 0 0 3px 0 rgba(0, 0, 0, 1);
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            box-shadow: 0 0 0 0 rgba($color: #fff, $alpha: .1), 0 0 3px 0 rgba(0, 0, 0, 1);
             border-radius: 50%;
             transition: 0.3s;
             border: none;
           }
 
           input[type="range"]::-moz-range-thumb:hover {
-            box-shadow: 0 0 0 15px rgba($color: blue, $alpha: .2), 0 0 3px 0 rgba(0, 0, 0, 1);
+            box-shadow: 0 0 0 15px rgba($color: #fff, $alpha: .2), 0 0 3px 0 rgba(0, 0, 0, 1);
           }
 
         }
