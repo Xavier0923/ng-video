@@ -11,7 +11,6 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 import { AppComponent } from './app.component';
-import { VideoPlayerComponent } from './video-player/video-player.component';
 import { CustomVideoPlayerComponent } from './custom-video-player/custom-video-player.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
@@ -20,7 +19,6 @@ import { UploadImageService } from './upload-image.service';
 @NgModule({
   declarations: [
     AppComponent,
-    VideoPlayerComponent,
     CustomVideoPlayerComponent
   ],
   imports: [
