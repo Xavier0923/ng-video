@@ -1,0 +1,67 @@
+.progress-bar {
+  width: 200px;
+  height: 30px;
+  background: #3C3C3C;
+  border-radius: 15px;
+  display: flex;
+  position: relative;
+  box-shadow: inset 0px 0px 3px 3px #000000;
+  padding:5px;
+  margin-bottom:10px;
+}
+
+.complete {
+  max-width: 100%;
+  height: 30px;
+  border-radius: 10px;
+  z-index: 1;
+  box-shadow:inset 1px 3px 5px #fff,0px 0px 3px #009CCC;
+  background: linear-gradient(to top, #00FFFF, #66B3FF, #BBFFFF);;
+  animation: width 1s;
+  -webkit-animation: width 1s;
+  -moz-animation: width 1s;
+  /* background-image: linear-gradient(45deg, #A6FFFF, #80FFFF, #4DFFFF, #00FFFF, #00E3E3, #00CACA); */
+  /* background-size: 300%; */
+  /* background-position: left; */
+  /* transition: width 2s; */
+}
+
+.process {
+  max-width: 100%;
+  height: 30px;
+  border-radius: 10px;
+  z-index: 0;
+  box-shadow: 0px 0px 3px #FF8000, inset 1px 3px 5px #fff;
+  background-image: linear-gradient(to top, #FFD306, #FFAF60, #FFD1A4);
+  -webkit-animation: width 1s;
+  -moz-animation: width 1s;
+  animation: width 1s;
+  // -webkit-animation: width 1s, complete 5s infinite normal;
+  // -moz-animation: width 1s, complete 5s infinite normal;
+  // animation: width 1s, complete 5s infinite normal;
+  // background-size: 300%;
+  // background-position: left;
+  // transition: background-position 1s;
+}
+
+
+@keyframes complete {
+  0% {
+    background-position:left;
+  }
+  50% {
+    background-position:right;
+  }
+  100% {
+    background-position:left;
+  }
+}
+
+@keyframes width {
+  0% {
+    width: 0%
+  }
+  100% {
+    width: 100%
+  }
+};

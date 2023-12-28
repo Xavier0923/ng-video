@@ -17,12 +17,11 @@
     height: 360px;
     position: relative;
 
-    .watermark{
+    .watermark-block{
       position: relative;
     }
 
-    .watermark::before {
-      content: '';
+    .watermark {
       position: absolute;
       top: calc(50% - 52px);
       right: calc(50% - 250px);
@@ -31,7 +30,19 @@
       background: url('../../assets/ctitv-logo.png');
       background-size: contain;
       background-repeat: no-repeat;
-      opacity: 0.1;
+      opacity: 0.3;
+    }
+
+    .new-watermark {
+      position: absolute;
+      top: calc(50% - 52px);
+      right: calc(50% - 250px);
+      bottom: calc(50% - 52px);
+      left: calc(50% - 250px);
+      background: url('../../assets/ctitv-logo.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      opacity: 0.3;
     }
 
     &:hover .video-controls {
@@ -241,4 +252,15 @@
 
   }
 
+}
+
+.pic {
+  transition: .2s ease-in-out;
+}
+
+
+.pic:hover {
+  transform: scale(5);
+  transform-origin: center right;
+  transition: .2s ease-in-out;
 }

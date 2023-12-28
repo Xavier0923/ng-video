@@ -1,0 +1,18 @@
+<div style="padding:50px;">
+  <div style="display:flex;align-items: center;" *ngFor="let item of data">
+    <div class="progress-bar">
+      <div matTooltip="已完成 {{item.complete}} 筆" matTooltipPosition="above" style="position: absolute;z-index:1;" [ngStyle]="{'width': ((item.complete / item.total) * 100) + '%'}">
+        <div class="complete">
+          <!-- 完成圖案 -->
+        </div>
+      </div>
+      <div matTooltip="{{item.process}} 筆執行中" matTooltipPosition="above" style="position: absolute;" [ngStyle]="{'width':  ((item.process / item.total) * 100) + ((item.complete / item.total) * 100) + '%'}">
+        <div class="process">
+          <!-- 正在進行 -->
+        </div>
+      </div>
+    </div>
+    <span>{{item.complete}}/{{item.total}} 已完成, {{item.process}}筆 執行中</span>
+  </div>
+</div>
+

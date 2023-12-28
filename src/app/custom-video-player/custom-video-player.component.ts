@@ -2,6 +2,8 @@ import { UploadImageService } from './../upload-image.service';
 import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import 'moment-duration-format'
+import { JsonService } from 'src/services/json.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 interface VideoFragments {
   url: string;
@@ -19,7 +21,8 @@ interface Fragments {
 @Component({
   selector: 'app-custom-video-player',
   templateUrl: './custom-video-player.component.html',
-  styleUrls: ['./custom-video-player.component.scss']
+  styleUrls: ['./custom-video-player.component.scss'],
+  providers: [JsonService]
 })
 export class CustomVideoPlayerComponent implements OnInit {
 
@@ -63,6 +66,9 @@ export class CustomVideoPlayerComponent implements OnInit {
   @ViewChild('progressTimeInp') progressTimeInp: ElementRef;
 
 
+  @ViewChild('watermark') watermark: ElementRef;
+
+
   // api 來的
   videoFragments: VideoFragments;
 
@@ -70,15 +76,43 @@ export class CustomVideoPlayerComponent implements OnInit {
   editVideoFragments: Fragments[];
 
   // 網址
-  // videoId = '202209010001';
-  // videoUncPath = '\\\\10.227.63.205\\low_resolution_01\\202209\\20220901\\202209010001\\';
-  videofile:unknown;
-  videoImage: unknown;
+  videofile = 'assets\\20220901\\202209010001.mp4';
+  videoImage = 'assets\\20220901\\202209010001_thumbnail.jpg';
+  videoFileUrl: SafeResourceUrl;
+  videoImageUrl: SafeResourceUrl;
+  videofileblob;
+  videoImageblob;
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2, private jsonService: JsonService, private ele: ElementRef,private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     this.getData();
+    this.jsonService.getJson().subscribe(res => console.log(res));
+    // this.videoFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.videofile);
+    // this.videoImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.videoImage);
+    // 透過api轉網址 video
+    this.jsonService.getFile(URL.createObjectURL(new Blob([this.videofile]))).subscribe((res) => {
+      console.log('video res', res)
+      this.videofile = URL.createObjectURL(res);
+    })
+    // 直接轉網址 video
+    // this.videofileblob = new Blob([this.videofileblob]);
+    // this.videofile = URL.createObjectURL(this.videofileblob);
+    // this.videoFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.videofile);
+
+    // 直接轉網址 image
+    // this.videoImageblob = new Blob([this.videoImage]);
+    // this.videoImage = URL.createObjectURL(this.videoImageblob);
+    // this.videoImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.videoImage);
+
+    // 透過api轉網址 image
+    // this.jsonService.getFile(URL.createObjectURL(new Blob([this.videoImage]))).subscribe((res) => {
+    //   console.log('image res', res);
+    //   this.videoImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(res));
+    // })
+    this.videoImageUrl = this.videoImage;
+    // this.watermarkObserve();
+
   }
 
   ngAfterViewInit(): void {
@@ -89,6 +123,7 @@ export class CustomVideoPlayerComponent implements OnInit {
     this.testReadFile.onerror = () => {
       console.log('file error')
     }
+
     // 事件
     //onloadeddata
     this.renderer.listen(this.videoPlayer.nativeElement, 'loadeddata', () => {
@@ -370,6 +405,45 @@ export class CustomVideoPlayerComponent implements OnInit {
   deleteFragment(index: number) {
     this.editVideoFragments.splice(index, 1)
     console.log(this.editVideoFragments)
+  }
+
+
+  // 監聽浮水印的dom 元素變化
+  // onDomChange(element): void {
+  //   console.log('element', element);
+  //   if(element){
+  //     const waterMarkParentDom = this.ele.nativeElement.querySelector('.watermark-block');
+  //     // const waterMarkChildDom = this.renderer.createElement('div')
+  //     const videoPlayer = this.ele.nativeElement.querySelector('.video-player');
+  //     this.renderer.addClass(element, 'new-watermark');
+  //     this.renderer.removeClass(element, 'watermark');
+  //     this.renderer.insertBefore(waterMarkParentDom, element, videoPlayer);
+  //   }
+
+  watermarkObserve(){
+    const waterMarkParentDom = this.ele.nativeElement.querySelector('.watermark-block');
+    const changes = new MutationObserver((mutationList: MutationRecord[]) => {
+        // this.appDomChange.emit(mutations[0])
+        // this.appDomChange.emit()
+        for (let mutation of mutationList){
+          console.log('mutation', mutation)
+          const type = mutation.type
+          if(type === 'childList' && mutation.removedNodes.length > 0){
+            mutation.target.appendChild(mutation.removedNodes[0]);
+            break;
+          }
+        };
+    });
+    changes.observe(waterMarkParentDom, {
+      childList: true,
+    });
+  }
+
+  // }
+
+  // 刪除浮水印
+  deleteDom(){
+    this.watermark.nativeElement.remove();
   }
 
 }

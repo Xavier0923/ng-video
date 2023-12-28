@@ -1,0 +1,33 @@
+table {
+  width: 100%;
+
+  // th{
+  //   border-right: 1px solid #fff;
+  //   background: #2c3e50;
+  //   color: #fff;
+  // }
+
+  .mat-header-cell {
+    border-right: 1px solid lightgrey;
+    background: #2c3e50;
+    color: #fff;
+  }
+}
+.example-detail-row {
+  transition: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  height:0;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  transition: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.detail-table {
+  background: #b7b7b773;
+  text-align: center;
+}

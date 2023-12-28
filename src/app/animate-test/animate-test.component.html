@@ -1,0 +1,33 @@
+<mat-card style="width:600px;">
+  <div>
+    <mat-form-field>
+      <mat-label>Input</mat-label>
+      <input matInput>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Input</mat-label>
+      <input matInput>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Input</mat-label>
+      <input matInput>
+    </mat-form-field>
+  </div>
+  <button (click)="isOpenMoreQuery = !isOpenMoreQuery">展開</button>
+  <div [@openMoreQueryOption]="isOpenMoreQuery ? 'open' : 'closed'">
+    <mat-form-field>
+      <mat-label>Input</mat-label>
+      <input matInput>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Input</mat-label>
+      <input matInput>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Input</mat-label>
+      <input matInput>
+    </mat-form-field>
+  </div>
+</mat-card>
+
+
